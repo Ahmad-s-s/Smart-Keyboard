@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static Methods.Functions.AutoComplete;
 import static Methods.Functions.spellCheck;
 
 
@@ -26,6 +25,7 @@ public class Main extends Application {
         primaryStage.setTitle("DS PROJECT");
 
         Trie mainTrie = Functions.read();
+        Trie reverseTrie = Functions.readRev();
         System.out.println(spellCheck(mainTrie, "a"));
 
         //top bar
@@ -88,7 +88,6 @@ public class Main extends Application {
             else{
                 textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
             }
-            ArrayList<String> suggestions = AutoComplete(newValue);
 
         });
 

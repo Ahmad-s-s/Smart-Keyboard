@@ -27,8 +27,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard" +
-                    "\\src\\words.txt");
+            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\Project\\DS_project\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -45,7 +44,6 @@ public class Functions {
         } else {
             System.out.println("empty list");
         }
-        root.print();
         return root;
     }
 
@@ -56,7 +54,7 @@ public class Functions {
 
             int index = textFiled.charAt(level) - 'a';
 
-            if (root.children.get(index) == null){
+            if (root.children.get(index) == null) {
                 return mainTrie;
             }
 
@@ -66,8 +64,64 @@ public class Functions {
         return root;
     }
 
-    public static ArrayList<String> AutoComplete(String){
+    public static Trie findRoot(Trie mainTrie, String textFiled) {
+        Trie root = mainTrie;
+
+        for (int level = 0; level < textFiled.length(); level++) {
+
+            int index = textFiled.charAt(level) - 'a';
+
+            if (root.children.get(index) == null) {
+                return root;
+            }
+
+            root = root.children.get(index);
+        }
+
+        return root;
+    }
+
+
+    public static void missSpell(Trie mainTrie,Trie reverseTrie, String textField) {
+        Trie root = mainTrie;
+        Trie reverseRoot = reverseTrie;
+        String toCorrect = textField;
+        StringBuilder reverser = new StringBuilder(toCorrect);
+        reverser.reverse();
+        String toCorrectReverse = reverser.toString();
+
+
+        Trie toCorrectRoot = Functions.findRoot(root, toCorrect);
+        Trie toCorrectReverseRoot = Functions.findRoot(reverseRoot, toCorrectReverse);
+
+
 
     }
 
+    public static Trie readRev() {
+        ArrayList<String> words = new ArrayList<>();
+        Trie root = new Trie();
+
+        try {
+            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\Project\\DS_project\\src\\words.txt");
+            Scanner fScanner = new Scanner(allWord);
+            while (fScanner.hasNext()) {
+                words.add(fScanner.next().toLowerCase().replace("-", ""));
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found !");
+            return null;
+        }
+        if (!words.isEmpty()) {
+            for (String string : words) {
+                StringBuilder strReverse = new StringBuilder(string);
+                strReverse.reverse();
+                String reversed = strReverse.toString();
+                addToTrie(root, reversed);
+            }
+        } else {
+            System.out.println("empty list");
+        }
+        return root;
+    }
 }
