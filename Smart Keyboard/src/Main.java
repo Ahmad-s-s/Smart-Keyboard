@@ -13,8 +13,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import static Methods.Functions.AutoComplete;
 import static Methods.Functions.spellCheck;
 
 
@@ -44,41 +46,12 @@ public class Main extends Application {
         Label label = new Label("Enter a word");
         label.setStyle("-fx-text-fill : #ffffff; -fx-font-family: fantasy; -fx-font-size : 25px;");
 
-        //textfield
-        TextField textField = new TextField();
-        textField.setMinWidth(320);
-        textField.setMinHeight(36);
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-//            System.out.println("textfield changed from " + oldValue + " to " + newValue);
-            boolean spellCheckValidation = spellCheck(mainTrie, newValue);
-            if (spellCheckValidation){
-                textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");
-            }
-            else{
-                textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
-            }
-        });
-
-        //button check
-        Button checkButton = new Button("Check");
-        checkButton.setStyle("-fx-background-color : #459285; -fx-text-fill: white;");
-        checkButton.setCursor(Cursor.HAND);
-        checkButton.setMinHeight(36);
-        checkButton.setMinWidth(50);
-        checkButton.setOnAction(event -> {
-            boolean checkValid = spellCheck(mainTrie, (String) textField.getText());
-            if (checkValid){
-                //textField.getText() frequency++
-            }
-        });
-
-
         //buttons suggestions
-        Button suggestion1 = new Button("suggest1");
-        Button suggestion2 = new Button("suggest2");
-        Button suggestion3 = new Button("suggest3");
-        Button suggestion4 = new Button("suggest4");
-        Button suggestion5 = new Button("suggest5");
+        Button suggestion1 = new Button("");
+        Button suggestion2 = new Button("");
+        Button suggestion3 = new Button("");
+        Button suggestion4 = new Button("");
+        Button suggestion5 = new Button("");
 
         suggestion1.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
         suggestion2.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
@@ -102,6 +75,35 @@ public class Main extends Application {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
+        //textfield
+        TextField textField = new TextField();
+        textField.setMinWidth(320);
+        textField.setMinHeight(36);
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            System.out.println("textfield changed from " + oldValue + " to " + newValue);
+            boolean spellCheckValidation = spellCheck(mainTrie, newValue).isValid;
+            if (spellCheckValidation){
+                textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");
+            }
+            else{
+                textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
+            }
+            ArrayList<String> suggestions = AutoComplete(newValue);
+
+        });
+
+        //button check
+        Button checkButton = new Button("Check");
+        checkButton.setStyle("-fx-background-color : #459285; -fx-text-fill: white;");
+        checkButton.setCursor(Cursor.HAND);
+        checkButton.setMinHeight(36);
+        checkButton.setMinWidth(50);
+        checkButton.setOnAction(event -> {
+            Trie checkValidNode = spellCheck(mainTrie, (String) textField.getText());
+            if (checkValidNode.isValid){
+                checkValidNode.frequency +=  1;
+            }
+        });
 
         //main box
         HBox textFillAndButton = new HBox(textField,checkButton);

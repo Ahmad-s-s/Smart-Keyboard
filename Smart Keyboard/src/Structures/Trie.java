@@ -3,6 +3,7 @@ package Structures;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 public class Trie {
 
     final static public int alphabet = 26;
@@ -27,9 +28,12 @@ public class Trie {
     }
 
     public void print() {
-        String s = this.getWord("", false);
-        if (s != "") {
-            System.out.println(s);
+        StringFreq nl = new StringFreq();
+        nl.word = "";
+        nl.frequency = -1;
+        StringFreq s = this.getWord(nl, false);
+        if (s != null) {
+            System.out.println(s.word + "  " + s.frequency);
         }
         for (int i = 0; i < Trie.alphabet; i++) {
             if (this.children.get(i) != null){
@@ -38,12 +42,55 @@ public class Trie {
         }
     }
 
-    public String getWord(String lastW, boolean between) {
+    public StringFreq getWord(StringFreq lastW, boolean between) {
         if (this.parent == null) {
+            StringFreq res = new StringFreq();
+            res.word = lastW.word;
+            res.frequency = lastW.frequency;
             return lastW;
-        }else if (this.isValid || between){
-            return this.parent.getWord(this.val + lastW, true);
+        } else if (between) {
+            StringFreq res = new StringFreq();
+            res.word = this.val + lastW.word;
+            res.frequency = lastW.frequency;
+            return this.parent.getWord(res, true);
+        } else if (this.isValid){
+            StringFreq res = new StringFreq();
+            res.word = this.val + lastW.word;
+            res.frequency = this.frequency;
+            return this.parent.getWord(res, true);
         }
-        return "";
+        return null;
     }
+
+    public ArrayList<StringFreq> getAllChildren(){
+        ArrayList<StringFreq> allWords = new ArrayList<>();
+        StringFreq nl= new StringFreq();
+        nl.word = "";
+        nl.frequency = -1;
+        StringFreq wordUpToHere = this.getWord(nl,false);
+        if (wordUpToHere != null)
+            allWords.add(wordUpToHere);
+
+        ArrayList<StringFreq> allChildren = new ArrayList<>();
+        for (int i = 0; i < Trie.alphabet; i++) {
+            if (this.children.get(i) != null){
+                allChildren = this.children.get(i).getAllChildren();
+            }
+        }
+        for (StringFreq strfr:allChildren) {
+            allWords.add(strfr);
+        }
+        return allWords;
+    };
 }
+
+
+
+
+
+
+
+
+
+
+
