@@ -27,8 +27,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\" +
-                    "final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
+            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\Project\\DS_project\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
