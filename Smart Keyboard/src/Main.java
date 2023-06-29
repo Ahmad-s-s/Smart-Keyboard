@@ -49,7 +49,7 @@ public class Main extends Application {
         textField.setMinWidth(320);
         textField.setMinHeight(36);
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("textfield changed from " + oldValue + " to " + newValue);
+//            System.out.println("textfield changed from " + oldValue + " to " + newValue);
             boolean spellCheckValidation = spellCheck(mainTrie, newValue);
             if (spellCheckValidation){
                 textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");

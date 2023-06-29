@@ -47,7 +47,7 @@ public class Functions {
         return root;
     }
 
-    public static boolean spellCheck(Trie mainTrie, String textFiled) {
+    public static Trie spellCheck(Trie mainTrie, String textFiled) {
         Trie root = mainTrie;
 
         for (int level = 0; level < textFiled.length(); level++) {
@@ -55,12 +55,12 @@ public class Functions {
             int index = textFiled.charAt(level) - 'a';
 
             if (root.children.get(index) == null){
-                return false;
+                return mainTrie;
             }
 
             root = root.children.get(index);
         }
 
-        return root.isValid;
+        return root;
     }
 }
