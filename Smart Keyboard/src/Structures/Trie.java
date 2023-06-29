@@ -86,7 +86,7 @@ public class Trie {
                 childWord) {
             res.add(word);
         }
-
+        System.out.println("Fuck you");
         return res;
     }
 }
