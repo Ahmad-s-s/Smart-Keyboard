@@ -44,34 +44,7 @@ public class Functions {
         } else {
             System.out.println("empty list");
         }
-//        char[] s = new char[20];
-//        root.print(s, 0);
-        root.print();
         return root;
-    }
-
-    public static ArrayList<String> AutoComplete(Trie mainTrie, String textFiled) {
-        Trie root = mainTrie;
-
-        for (int level = 0; level < textFiled.length(); level++) {
-
-            int index = textFiled.charAt(level) - 'a';
-            if (root.children.get(index) == null) {
-                break;
-            }
-            root = root.children.get(index);
-        }
-
-        ArrayList<String> textChildren = new ArrayList<>();
-
-        char[] s = new char[100];
-        textChildren = root.allChildren(s, 0);
-
-        System.out.println(textChildren.size());
-        for (String textChild : textChildren) {
-            System.out.println(textChild);
-        }
-        return textChildren;
     }
 
     public static boolean spellCheck(Trie mainTrie, String textFiled) {

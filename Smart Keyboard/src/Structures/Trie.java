@@ -26,22 +26,6 @@ public class Trie {
         this.parent = null;
     }
 
-    public void print(char[] s, int level) {
-        if (this.isValid) {
-            s[level] = '\0';
-            for (int i = 0; i < level; i++) {
-                System.out.print(s[i]);
-            }
-            System.out.println("   " + this.tChild);
-        }
-        for (int i = 0; i < Trie.alphabet; i++) {
-            if (this.children.get(i) != null) {
-                s[level] = (char) ((char) i + 'a');
-                this.children.get(i).print(s, level+1);
-            }
-        }
-    }
-
     public void print() {
         String s = this.getWord("", false);
         if (s != "") {
@@ -61,32 +45,5 @@ public class Trie {
             return this.parent.getWord(this.val + lastW, true);
         }
         return "";
-    }
-
-    public ArrayList<String> allChildren (char[] s, int level) {
-
-        ArrayList<String> res = new ArrayList<>();
-
-        if (this.isValid){
-            String word = "";
-            for (int i = 0; i < level; i++) {
-                word.concat(String.valueOf(s[i]));
-            }
-            res.add(word);
-        }
-
-        ArrayList<String> childWord = new ArrayList<>();
-        for (int i = 0; i < Trie.alphabet; i++) {
-            if (this.children.get(i) != null) {
-                s[level] = (char) ((char) i + 'a');
-                childWord = this.children.get(i).allChildren(s, level+1);
-            }
-        }
-        for (String word :
-                childWord) {
-            res.add(word);
-        }
-        System.out.println("Fuck you");
-        return res;
     }
 }
