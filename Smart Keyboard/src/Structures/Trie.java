@@ -75,10 +75,10 @@ public class Trie {
         for (int i = 0; i < Trie.alphabet; i++) {
             if (this.children.get(i) != null){
                 allChildren = this.children.get(i).getAllChildren();
+                for (StringFreq strfr:allChildren) {
+                    allWords.add(strfr);
+                }
             }
-        }
-        for (StringFreq strfr:allChildren) {
-            allWords.add(strfr);
         }
         return allWords;
     };
