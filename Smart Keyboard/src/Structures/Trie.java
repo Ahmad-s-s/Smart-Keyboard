@@ -16,7 +16,7 @@ public class Trie {
 
     public char val;
 
-    public Trie () {
+    public Trie() {
         this.children = new ArrayList<>();
         for (int i = 0; i < Trie.alphabet; i++) {
             this.children.add(null);
@@ -36,7 +36,7 @@ public class Trie {
             System.out.println(s.word + "  " + s.frequency);
         }
         for (int i = 0; i < Trie.alphabet; i++) {
-            if (this.children.get(i) != null){
+            if (this.children.get(i) != null) {
                 this.children.get(i).print();
             }
         }
@@ -53,7 +53,7 @@ public class Trie {
             res.word = this.val + lastW.word;
             res.frequency = lastW.frequency;
             return this.parent.getWord(res, true);
-        } else if (this.isValid){
+        } else if (this.isValid) {
             StringFreq res = new StringFreq();
             res.word = this.val + lastW.word;
             res.frequency = this.frequency;
@@ -62,26 +62,28 @@ public class Trie {
         return null;
     }
 
-    public ArrayList<StringFreq> getAllChildren(){
+    public ArrayList<StringFreq> getAllChildren() {
         ArrayList<StringFreq> allWords = new ArrayList<>();
-        StringFreq nl= new StringFreq();
+        StringFreq nl = new StringFreq();
         nl.word = "";
         nl.frequency = -1;
-        StringFreq wordUpToHere = this.getWord(nl,false);
+        StringFreq wordUpToHere = this.getWord(nl, false);
         if (wordUpToHere != null)
             allWords.add(wordUpToHere);
 
         ArrayList<StringFreq> allChildren = new ArrayList<>();
         for (int i = 0; i < Trie.alphabet; i++) {
-            if (this.children.get(i) != null){
+            if (this.children.get(i) != null) {
                 allChildren = this.children.get(i).getAllChildren();
-                for (StringFreq strfr:allChildren) {
+                for (StringFreq strfr : allChildren) {
                     allWords.add(strfr);
                 }
             }
         }
         return allWords;
-    };
+    }
+
+    ;
 }
 
 

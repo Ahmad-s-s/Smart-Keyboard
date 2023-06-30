@@ -82,10 +82,9 @@ public class Main extends Application {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
 //            System.out.println("textfield changed from " + oldValue + " to " + newValue);
             boolean spellCheckValidation = spellCheck(mainTrie, newValue).isValid;
-            if (spellCheckValidation){
+            if (spellCheckValidation) {
                 textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");
-            }
-            else{
+            } else {
                 textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
             }
 
@@ -99,19 +98,19 @@ public class Main extends Application {
         checkButton.setMinWidth(50);
         checkButton.setOnAction(event -> {
             Trie checkValidNode = spellCheck(mainTrie, (String) textField.getText());
-            if (checkValidNode.isValid){
-                checkValidNode.frequency +=  1;
+            if (checkValidNode.isValid) {
+                checkValidNode.frequency += 1;
             }
         });
 
         //main box
-        HBox textFillAndButton = new HBox(textField,checkButton);
+        HBox textFillAndButton = new HBox(textField, checkButton);
         textFillAndButton.setAlignment(Pos.CENTER);
         textFillAndButton.setSpacing(5);
         textFillAndButton.setMinHeight(36);
         textFillAndButton.setMinWidth(380);
 
-        VBox mainBox = new VBox(label,textFillAndButton,gridPane);
+        VBox mainBox = new VBox(label, textFillAndButton, gridPane);
         mainBox.setMaxWidth(500);
         mainBox.setMaxHeight(620);
         mainBox.setMinHeight(620);
@@ -122,18 +121,14 @@ public class Main extends Application {
 
         // Scene
 
-        VBox container =  new VBox();
+        VBox container = new VBox();
         container.getChildren().addAll(topBar, mainBox);
-        Scene scene = new Scene(container,500,700);
+        Scene scene = new Scene(container, 500, 700);
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(400);
 
         primaryStage.show();
-
-
-
-
 
 
     }

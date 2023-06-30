@@ -47,6 +47,33 @@ public class Functions {
         return root;
     }
 
+    public static Trie readRev() {
+        ArrayList<String> words = new ArrayList<>();
+        Trie root = new Trie();
+
+        try {
+            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\Project\\DS_project\\src\\words.txt");
+            Scanner fScanner = new Scanner(allWord);
+            while (fScanner.hasNext()) {
+                words.add(fScanner.next().toLowerCase().replace("-", ""));
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found !");
+            return null;
+        }
+        if (!words.isEmpty()) {
+            for (String string : words) {
+                StringBuilder strReverse = new StringBuilder(string);
+                strReverse.reverse();
+                String reversed = strReverse.toString();
+                addToTrie(root, reversed);
+            }
+        } else {
+            System.out.println("empty list");
+        }
+        return root;
+    }
+
     public static Trie spellCheck(Trie mainTrie, String textFiled) {
         Trie root = mainTrie;
 
@@ -96,32 +123,5 @@ public class Functions {
 
 
 
-    }
-
-    public static Trie readRev() {
-        ArrayList<String> words = new ArrayList<>();
-        Trie root = new Trie();
-
-        try {
-            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\Project\\DS_project\\src\\words.txt");
-            Scanner fScanner = new Scanner(allWord);
-            while (fScanner.hasNext()) {
-                words.add(fScanner.next().toLowerCase().replace("-", ""));
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found !");
-            return null;
-        }
-        if (!words.isEmpty()) {
-            for (String string : words) {
-                StringBuilder strReverse = new StringBuilder(string);
-                strReverse.reverse();
-                String reversed = strReverse.toString();
-                addToTrie(root, reversed);
-            }
-        } else {
-            System.out.println("empty list");
-        }
-        return root;
     }
 }
