@@ -76,7 +76,7 @@ public class Main extends Application {
                     button.setOnAction(event -> {
                         textField.setText(button.getText());
                     });
-                    button.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d; -fx- border-color : red;");
+                    button.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d; -fx-border-color : red;");
                     button.setCursor(Cursor.HAND);
                     suggestButtons.add(button);
                 }

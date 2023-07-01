@@ -28,7 +28,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
+            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -53,7 +53,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
+            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -129,7 +129,6 @@ public class Functions {
         return root;
     }
 
-
     public static ArrayList<String> missSpell(Trie mainTrie, Trie reverseTrie, String textField) {
         Trie root = mainTrie;
         Trie reverseRoot = reverseTrie;
@@ -160,23 +159,82 @@ public class Functions {
 
         ArrayList<String> finalResult = new ArrayList<>();
         if (toCorrectText.word.length() > toCorrectTextReverse.word.length()) {
-            for (int i = 0; i < toCorrectResult.size(); i++) {
-                finalResult.add(toCorrectResult.get(i));
+
+            // sort on prefix suggestions
+            int lenPrefix = toCorrectText.word.length();
+            for (int i = 0; i < toCorrectResult.size()-1; i++) {
+                int index = i;
+                int key = toCorrectResult.get(i).length() - lenPrefix;
+                for (int j = i+1; j < toCorrectResult.size(); j++) {
+                    if (toCorrectResult.get(j).length() - lenPrefix > key){
+                        index = j;
+                    }
+                }
+                String temp = toCorrectResult.get(index);
+                toCorrectResult.set(index, toCorrectResult.get(i));
+                toCorrectResult.set(i, temp);
             }
-            for (int i = 0; i < toCorrectReverseResult.size(); i++) {
-                finalResult.add(toCorrectReverseResult.get(i));
+
+            //sort on prefix suggestions
+            int lenSuffix = toCorrectText.word.length();
+            for (int i = 0; i < toCorrectReverseResult.size()-1; i++) {
+                int index = i;
+                int key = toCorrectReverseResult.get(i).length() - lenSuffix;
+                for (int j = i+1; j < toCorrectReverseResult.size(); j++) {
+                    if (toCorrectReverseResult.get(j).length() - lenSuffix > key){
+                        index = j;
+                    }
+                }
+                String temp = toCorrectReverseResult.get(index);
+                toCorrectReverseResult.set(index, toCorrectReverseResult.get(i));
+                toCorrectReverseResult.set(i, temp);
             }
-        }else{
-            for (int i = 0; i < toCorrectReverseResult.size(); i++) {
-                finalResult.add(toCorrectReverseResult.get(i));
+            finalResult.addAll(toCorrectResult);
+            finalResult.addAll(toCorrectReverseResult);
+        } else{
+            // sort on suffix suggestions
+            int lenSuffix = toCorrectText.word.length();
+            for (int i = 0; i < toCorrectReverseResult.size()-1; i++) {
+                int index = i;
+                int key = toCorrectReverseResult.get(i).length() - lenSuffix;
+                for (int j = i+1; j < toCorrectReverseResult.size(); j++) {
+                    if (toCorrectReverseResult.get(j).length() - lenSuffix > key){
+                        index = j;
+                    }
+                }
+                String temp = toCorrectReverseResult.get(index);
+                toCorrectReverseResult.set(index, toCorrectReverseResult.get(i));
+                toCorrectReverseResult.set(i, temp);
             }
-            for (int i = 0; i < toCorrectResult.size(); i++) {
-                finalResult.add(toCorrectResult.get(i));
+
+            // sort on prefix suggestions
+            int lenPrefix = toCorrectText.word.length();
+            for (int i = 0; i < toCorrectResult.size()-1; i++) {
+                int index = i;
+                int key = toCorrectResult.get(i).length() - lenPrefix;
+                for (int j = i+1; j < toCorrectResult.size(); j++) {
+                    if (toCorrectResult.get(j).length() - lenPrefix > key){
+                        index = j;
+                    }
+                }
+                String temp = toCorrectResult.get(index);
+                toCorrectResult.set(index, toCorrectResult.get(i));
+                toCorrectResult.set(i, temp);
             }
+            finalResult.addAll(toCorrectReverseResult);
+            finalResult.addAll(toCorrectResult);
         }
 
-        return finalResult;
 
+        if (finalResult.size() <= 5) {
+            return finalResult;
+        }else{
+            ArrayList<String> f = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                f.add(finalResult.get(i));
+            }
+            return f;
+        }
     }
 
     public static ArrayList<String> AutoComplete(Trie endNode,String textField){
