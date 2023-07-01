@@ -33,7 +33,7 @@ public class Trie {
         nl.frequency = -1;
         StringFreq s = this.getWord(nl, false);
         if (s != null) {
-            System.out.println(s.word + "  " + s.frequency);
+            //System.out.println(s.word + "  " + s.frequency);
         }
         for (int i = 0; i < Trie.alphabet; i++) {
             if (this.children.get(i) != null){
@@ -70,15 +70,13 @@ public class Trie {
         StringFreq wordUpToHere = this.getWord(nl,false);
         if (wordUpToHere != null)
             allWords.add(wordUpToHere);
-
         ArrayList<StringFreq> allChildren = new ArrayList<>();
         for (int i = 0; i < Trie.alphabet; i++) {
             if (this.children.get(i) != null){
                 allChildren = this.children.get(i).getAllChildren();
+                for (StringFreq strfr:allChildren)
+                    allWords.add(strfr);
             }
-        }
-        for (StringFreq strfr:allChildren) {
-            allWords.add(strfr);
         }
         return allWords;
     };
