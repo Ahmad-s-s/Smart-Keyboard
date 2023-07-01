@@ -28,8 +28,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard" +
-                    "\\src\\words.txt");
+            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -54,8 +53,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard" +
-            "\\src\\words.txt");
+            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -78,6 +76,7 @@ public class Functions {
     }
 
     public static Trie spellCheck(Trie mainTrie, String textFiled) {
+        // returns the word if it exists or mainRoot otherwise.
         Trie root = mainTrie;
 
         for (int level = 0; level < textFiled.length(); level++) {
@@ -95,6 +94,7 @@ public class Functions {
     }
 
     public static Trie findRoot(Trie mainTrie, String textFiled) {
+        // returns the last possible node of trie
         Trie root = mainTrie;
 
         for (int level = 0; level < textFiled.length(); level++) {
@@ -103,6 +103,24 @@ public class Functions {
 
             if (root.children.get(index) == null) {
                 return root;
+            }
+
+            root = root.children.get(index);
+        }
+
+        return root;
+    }
+
+    public static Trie findRootNull(Trie mainTrie, String textFiled) {
+        // returns the last root if it exists, null otherwise.
+        Trie root = mainTrie;
+
+        for (int level = 0; level < textFiled.length(); level++) {
+
+            int index = textFiled.charAt(level) - 'a';
+
+            if (root.children.get(index) == null) {
+                return null;
             }
 
             root = root.children.get(index);
