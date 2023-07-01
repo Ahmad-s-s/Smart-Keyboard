@@ -26,6 +26,7 @@ public class Main extends Application {
         primaryStage.setTitle("DS PROJECT");
 
         Trie mainTrie = Functions.read();
+        Trie reverseTrie = Functions.readRev();
         //  System.out.println(spellCheck(mainTrie, "a"));
 
         //top bar
@@ -56,33 +57,33 @@ public class Main extends Application {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             ArrayList<Button> suggestButtons = new ArrayList<>();
             Trie endNode = spellCheck(mainTrie, newValue);
+            Trie endNodeFromFinalRoot = findRoot(mainTrie,newValue);
             HBox gridPane = new HBox();
             gridPane.setSpacing(8);
             gridPane.setAlignment(Pos.CENTER);
             if (endNode.isValid){
                 textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");
-            }
-            else{
+            } else if (endNodeFromFinalRoot != endNode) {
                 textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
-                endNode = findRoot(mainTrie,newValue);
+            } else{
+                textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
+                suggestGrid.getChildren().clear();
+                ArrayList<String> suggestions = AutoComplete(endNode,newValue);
+                for (String suggest:suggestions) {
+                    Button button = new Button(suggest);
+                    button.setOnAction(event -> {
+                        textField.setText(button.getText());
+                    });
+                    button.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
+                    button.setCursor(Cursor.HAND);
+                    suggestButtons.add(button);
+                }
+                System.out.println(suggestions);
+                for (int i = 0 ; i < suggestButtons.size() ; i++){
+                    gridPane.getChildren().add(suggestButtons.get(i));
+                }
+                suggestGrid.getChildren().add(gridPane);
             }
-            System.out.println(endNode.val);
-            ArrayList<String> suggestions = AutoComplete(endNode,newValue);
-            for (String suggest:suggestions) {
-                Button button = new Button(suggest);
-                button.setOnAction(event -> {
-                    textField.setText(button.getText());
-                });
-                button.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
-                button.setCursor(Cursor.HAND);
-                suggestButtons.add(button);
-            }
-            System.out.println(suggestions);
-            for (int i = 0 ; i < suggestButtons.size() ; i++){
-                gridPane.getChildren().add(suggestButtons.get(i));
-            }
-            suggestGrid.getChildren().clear();
-            suggestGrid.getChildren().add(gridPane);
         });
 
         //button check
