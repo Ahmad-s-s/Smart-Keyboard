@@ -1,5 +1,6 @@
 package Methods;
 
+import Structures.StringFreq;
 import Structures.Trie;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\Project\\DS_project\\src\\words.txt");
+            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -52,7 +53,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\Uni\\semester 4\\Data Structure\\Project\\DS_project\\src\\words.txt");
+            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -81,7 +82,7 @@ public class Functions {
 
             int index = textFiled.charAt(level) - 'a';
 
-            if (root.children.get(index) == null) {
+            if (root.children.get(index) == null){
                 return mainTrie;
             }
 
@@ -123,5 +124,38 @@ public class Functions {
 
 
 
+    }
+
+    public static ArrayList<String> AutoComplete(Trie endNode,String textField){
+        ArrayList<StringFreq> stringFreqs = endNode.getAllChildren();
+
+        ArrayList<String> result = new ArrayList<>();
+        int maxAdd = 5;
+
+        if (endNode.isValid){
+            StringFreq nl= new StringFreq();
+            nl.word = "";
+            nl.frequency = -1;
+            StringFreq selfWord = endNode.getWord(nl,false);
+            result.add(selfWord.word);
+            maxAdd = maxAdd - 1;
+        }
+        if (stringFreqs.size() < maxAdd)
+            maxAdd = stringFreqs.size();
+
+        for (int i = 0; i < maxAdd ; i++){
+            int minFreq = 0;
+            StringFreq max = new StringFreq();
+            max.frequency = -1;
+            for (int j = stringFreqs.size()-1; j > -1  ; j--) {
+                if (stringFreqs.get(j).frequency >= minFreq && !result.contains(stringFreqs.get(j).word)){
+                    max = stringFreqs.get(j);
+                    minFreq = stringFreqs.get(j).frequency;
+                }
+            }
+            if (max.frequency != -1)
+                result.add(max.word);
+        }
+        return result;
     }
 }
