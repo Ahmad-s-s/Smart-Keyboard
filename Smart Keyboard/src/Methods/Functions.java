@@ -28,7 +28,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
+            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -53,7 +53,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
+            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -110,7 +110,7 @@ public class Functions {
     }
 
 
-    public static void missSpell(Trie mainTrie,Trie reverseTrie, String textField) {
+    public static ArrayList<String> missSpell(Trie mainTrie, Trie reverseTrie, String textField) {
         Trie root = mainTrie;
         Trie reverseRoot = reverseTrie;
         String toCorrect = textField;
@@ -122,7 +122,40 @@ public class Functions {
         Trie toCorrectRoot = Functions.findRoot(root, toCorrect);
         Trie toCorrectReverseRoot = Functions.findRoot(reverseRoot, toCorrectReverse);
 
+        StringFreq nl = new StringFreq();
+        nl.word = "";
+        nl.frequency = -1;
 
+        StringFreq toCorrectText = toCorrectRoot.getWord(nl, false);
+        StringFreq toCorrectTextReverse = toCorrectReverseRoot.getWord(nl, false);
+
+        ArrayList<String> toCorrectResult = Functions.AutoComplete(root, toCorrectText.word);
+        ArrayList<String> toCorrectReverseResult = Functions.AutoComplete(reverseRoot, toCorrectTextReverse.word);
+
+        for (int i = 0; i < toCorrectReverseResult.size(); i++) {
+            reverser = new StringBuilder(toCorrectReverseResult.get(i));
+            reverser.reverse();
+            toCorrectReverseResult.set(i, reverser.toString());
+        }
+
+        ArrayList<String> finalResult = new ArrayList<>();
+        if (toCorrectText.word.length() > toCorrectTextReverse.word.length()) {
+            for (int i = 0; i < toCorrectResult.size(); i++) {
+                finalResult.add(toCorrectResult.get(i));
+            }
+            for (int i = 0; i < toCorrectReverseResult.size(); i++) {
+                finalResult.add(toCorrectReverseResult.get(i));
+            }
+        }else{
+            for (int i = 0; i < toCorrectReverseResult.size(); i++) {
+                finalResult.add(toCorrectReverseResult.get(i));
+            }
+            for (int i = 0; i < toCorrectResult.size(); i++) {
+                finalResult.add(toCorrectResult.get(i));
+            }
+        }
+
+        return finalResult;
 
     }
 
