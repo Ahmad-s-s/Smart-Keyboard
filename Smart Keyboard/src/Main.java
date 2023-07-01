@@ -56,19 +56,35 @@ public class Main extends Application {
         textField.setMinHeight(36);
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             ArrayList<Button> suggestButtons = new ArrayList<>();
-            Trie endNode = spellCheck(mainTrie, newValue);
-            Trie endNodeFromFinalRoot = findRoot(mainTrie,newValue);
+            Trie endNodeSpellCheck = spellCheck(mainTrie, newValue);
+            Trie endNodeFromFindRoot = findRoot(mainTrie,newValue);
+            Trie endNodeFromFindRootNull = findRootNull(mainTrie,newValue);
             HBox gridPane = new HBox();
             gridPane.setSpacing(8);
             gridPane.setAlignment(Pos.CENTER);
-            if (endNode.isValid){
+            System.out.println("shit");
+
+            if (endNodeSpellCheck.isValid){
                 textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");
-            } else if (endNodeFromFinalRoot != endNode) {
+            }
+            else if (endNodeFromFindRootNull == null && !newValue.equals("")) { //correction
                 textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
-            } else{
+                ArrayList<String> suggestions = missSpell(mainTrie,reverseTrie,newValue);
+                suggestGrid.getChildren().clear();
+                for (String suggest:suggestions) {
+                    Button button = new Button(suggest);
+                    button.setOnAction(event -> {
+                        textField.setText(button.getText());
+                    });
+                    button.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d; -fx- border-color : red;");
+                    button.setCursor(Cursor.HAND);
+                    suggestButtons.add(button);
+                }
+            }
+            else{//auto complete
                 textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
                 suggestGrid.getChildren().clear();
-                ArrayList<String> suggestions = AutoComplete(endNode,newValue);
+                ArrayList<String> suggestions = AutoComplete(endNodeSpellCheck,newValue);
                 for (String suggest:suggestions) {
                     Button button = new Button(suggest);
                     button.setOnAction(event -> {
@@ -78,12 +94,11 @@ public class Main extends Application {
                     button.setCursor(Cursor.HAND);
                     suggestButtons.add(button);
                 }
-                System.out.println(suggestions);
-                for (int i = 0 ; i < suggestButtons.size() ; i++){
-                    gridPane.getChildren().add(suggestButtons.get(i));
-                }
-                suggestGrid.getChildren().add(gridPane);
             }
+            for (int i = 0 ; i < suggestButtons.size() ; i++){
+                gridPane.getChildren().add(suggestButtons.get(i));
+            }
+            suggestGrid.getChildren().add(gridPane);
         });
 
         //button check

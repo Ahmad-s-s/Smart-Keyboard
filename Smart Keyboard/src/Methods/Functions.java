@@ -28,7 +28,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
+            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -53,7 +53,7 @@ public class Functions {
         Trie root = new Trie();
 
         try {
-            File allWord = new File("D:\\uni\\semester 4\\Data Structure\\final project\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
+            File allWord = new File("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\words.txt");
             Scanner fScanner = new Scanner(allWord);
             while (fScanner.hasNext()) {
                 words.add(fScanner.next().toLowerCase().replace("-", ""));
@@ -146,11 +146,11 @@ public class Functions {
         nl.word = "";
         nl.frequency = -1;
 
-        StringFreq toCorrectText = toCorrectRoot.getWord(nl, false);
-        StringFreq toCorrectTextReverse = toCorrectReverseRoot.getWord(nl, false);
+        StringFreq toCorrectText = toCorrectRoot.getWord(nl, true);
+        StringFreq toCorrectTextReverse = toCorrectReverseRoot.getWord(nl, true);
 
-        ArrayList<String> toCorrectResult = Functions.AutoComplete(root, toCorrectText.word);
-        ArrayList<String> toCorrectReverseResult = Functions.AutoComplete(reverseRoot, toCorrectTextReverse.word);
+        ArrayList<String> toCorrectResult = AutoComplete(toCorrectRoot, toCorrectText.word);
+        ArrayList<String> toCorrectReverseResult = AutoComplete(toCorrectReverseRoot, toCorrectTextReverse.word);
 
         for (int i = 0; i < toCorrectReverseResult.size(); i++) {
             reverser = new StringBuilder(toCorrectReverseResult.get(i));
