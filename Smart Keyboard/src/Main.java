@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -24,10 +25,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("DS PROJECT");
+        //primaryStage.getIcons().add(new Image("D:\\semester 4\\DS\\FinalProject\\smart-keyboard\\Smart Keyboard\\src\\k.png"));
 
         Trie mainTrie = Functions.read();
         Trie reverseTrie = Functions.readRev();
-        //  System.out.println(spellCheck(mainTrie, "a"));
 
         //top bar
         Label topBarLabel = new Label("SMART KEYBOARD");
@@ -47,6 +48,13 @@ public class Main extends Application {
         Label label = new Label("Enter a word");
         label.setStyle("-fx-text-fill : #ffffff; -fx-font-family: fantasy; -fx-font-size : 25px;");
 
+        //button check
+        Button checkButton = new Button("Check");
+        checkButton.setStyle("-fx-background-color : #459285; -fx-text-fill: white;");
+        checkButton.setCursor(Cursor.HAND);
+        checkButton.setMinHeight(36);
+        checkButton.setMinWidth(50);
+
         //textfield
         HBox suggestGrid = new HBox();
         suggestGrid.setSpacing(8);
@@ -55,6 +63,9 @@ public class Main extends Application {
         textField.setMinWidth(320);
         textField.setMinHeight(36);
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            checkButton.setStyle("-fx-background-color : #459285; -fx-text-fill: white;");
+            checkButton.textProperty().set("Check");
+
             ArrayList<Button> suggestButtons = new ArrayList<>();
             Trie endNodeSpellCheck = spellCheck(mainTrie, newValue);
             Trie endNodeFromFindRoot = findRoot(mainTrie,newValue);
@@ -62,10 +73,20 @@ public class Main extends Application {
             HBox gridPane = new HBox();
             gridPane.setSpacing(8);
             gridPane.setAlignment(Pos.CENTER);
-            System.out.println("shit");
 
             if (endNodeSpellCheck.isValid){
                 textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");
+                suggestGrid.getChildren().clear();
+                ArrayList<String> suggestions = AutoComplete(endNodeSpellCheck,newValue);
+                for (String suggest:suggestions) {
+                    Button button = new Button(suggest);
+                    button.setOnAction(event -> {
+                        textField.setText(button.getText());
+                    });
+                    button.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
+                    button.setCursor(Cursor.HAND);
+                    suggestButtons.add(button);
+                }
             }
             else if (endNodeFromFindRootNull == null && !newValue.equals("")) { //correction
                 textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
@@ -95,24 +116,23 @@ public class Main extends Application {
                     suggestButtons.add(button);
                 }
             }
+
             for (int i = 0 ; i < suggestButtons.size() ; i++){
                 gridPane.getChildren().add(suggestButtons.get(i));
             }
             suggestGrid.getChildren().add(gridPane);
         });
 
-        //button check
-        Button checkButton = new Button("Check");
-        checkButton.setStyle("-fx-background-color : #459285; -fx-text-fill: white;");
-        checkButton.setCursor(Cursor.HAND);
-        checkButton.setMinHeight(36);
-        checkButton.setMinWidth(50);
+        // check button action
         checkButton.setOnAction(event -> {
             Trie checkValidNode = spellCheck(mainTrie, (String) textField.getText());
             if (checkValidNode.isValid){
                 checkValidNode.frequency +=  1;
+                checkButton.setStyle("-fx-background-color : #02ccb1; -fx-text-fill: white;");
+                checkButton.textProperty().set("Checked!");
             }
         });
+
 
         //main box
         HBox textFillAndButton = new HBox(textField,checkButton);
@@ -140,11 +160,6 @@ public class Main extends Application {
         primaryStage.setMinWidth(400);
 
         primaryStage.show();
-
-
-
-
-
 
     }
 }
