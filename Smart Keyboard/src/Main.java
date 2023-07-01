@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static Methods.Functions.*;
+import static Methods.Functions.spellCheck;
 
 
 public class Main extends Application {
@@ -25,7 +25,8 @@ public class Main extends Application {
         primaryStage.setTitle("DS PROJECT");
 
         Trie mainTrie = Functions.read();
-      //  System.out.println(spellCheck(mainTrie, "a"));
+        Trie reverseTrie = Functions.readRev();
+        System.out.println(spellCheck(mainTrie, "a"));
 
         //top bar
         Label topBarLabel = new Label("SMART KEYBOARD");
@@ -45,43 +46,48 @@ public class Main extends Application {
         Label label = new Label("Enter a word");
         label.setStyle("-fx-text-fill : #ffffff; -fx-font-family: fantasy; -fx-font-size : 25px;");
 
+        //buttons suggestions
+        Button suggestion1 = new Button("");
+        Button suggestion2 = new Button("");
+        Button suggestion3 = new Button("");
+        Button suggestion4 = new Button("");
+        Button suggestion5 = new Button("");
+
+        suggestion1.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
+        suggestion2.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
+        suggestion3.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
+        suggestion4.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
+        suggestion5.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
+
+        suggestion1.setCursor(Cursor.HAND);
+        suggestion2.setCursor(Cursor.HAND);
+        suggestion3.setCursor(Cursor.HAND);
+        suggestion4.setCursor(Cursor.HAND);
+        suggestion5.setCursor(Cursor.HAND);
+
+        GridPane gridPane = new GridPane();
+        gridPane.add(suggestion1, 0, 0, 1, 1);
+        gridPane.add(suggestion2, 1, 0, 1, 1);
+        gridPane.add(suggestion3, 2, 0, 1, 1);
+        gridPane.add(suggestion4, 3, 0, 1, 1);
+        gridPane.add(suggestion5, 4, 0, 1, 1);
+        gridPane.setHgap(8);
+        gridPane.setVgap(10);
+        gridPane.setAlignment(Pos.CENTER);
+
         //textfield
-        HBox suggestGrid = new HBox();
-        suggestGrid.setSpacing(8);
-        suggestGrid.setAlignment(Pos.CENTER);
         TextField textField = new TextField();
         textField.setMinWidth(320);
         textField.setMinHeight(36);
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            ArrayList<Button> suggestButtons = new ArrayList<>();
-            Trie endNode = spellCheck(mainTrie, newValue);
-            HBox gridPane = new HBox();
-            gridPane.setSpacing(8);
-            gridPane.setAlignment(Pos.CENTER);
-            if (endNode.isValid){
+//            System.out.println("textfield changed from " + oldValue + " to " + newValue);
+            boolean spellCheckValidation = spellCheck(mainTrie, newValue).isValid;
+            if (spellCheckValidation) {
                 textField.setStyle("-fx-text-fill : green; -fx-border-color : green;");
-            }
-            else{
+            } else {
                 textField.setStyle("-fx-text-fill : red; -fx-border-color : red;");
-                endNode = findRoot(mainTrie,newValue);
             }
-            System.out.println(endNode.val);
-            ArrayList<String> suggestions = AutoComplete(endNode,newValue);
-            for (String suggest:suggestions) {
-                Button button = new Button(suggest);
-                button.setOnAction(event -> {
-                    textField.setText(button.getText());
-                });
-                button.setStyle("-fx-background-color : #9b9b9b; -fx-text-fill: #34373d;");
-                button.setCursor(Cursor.HAND);
-                suggestButtons.add(button);
-            }
-            System.out.println(suggestions);
-            for (int i = 0 ; i < suggestButtons.size() ; i++){
-                gridPane.getChildren().add(suggestButtons.get(i));
-            }
-            suggestGrid.getChildren().clear();
-            suggestGrid.getChildren().add(gridPane);
+
         });
 
         //button check
@@ -92,19 +98,19 @@ public class Main extends Application {
         checkButton.setMinWidth(50);
         checkButton.setOnAction(event -> {
             Trie checkValidNode = spellCheck(mainTrie, (String) textField.getText());
-            if (checkValidNode.isValid){
-                checkValidNode.frequency +=  1;
+            if (checkValidNode.isValid) {
+                checkValidNode.frequency += 1;
             }
         });
 
         //main box
-        HBox textFillAndButton = new HBox(textField,checkButton);
+        HBox textFillAndButton = new HBox(textField, checkButton);
         textFillAndButton.setAlignment(Pos.CENTER);
         textFillAndButton.setSpacing(5);
         textFillAndButton.setMinHeight(36);
         textFillAndButton.setMinWidth(380);
 
-        VBox mainBox = new VBox(label,textFillAndButton,suggestGrid);
+        VBox mainBox = new VBox(label, textFillAndButton, gridPane);
         mainBox.setMaxWidth(500);
         mainBox.setMaxHeight(620);
         mainBox.setMinHeight(620);
@@ -115,18 +121,14 @@ public class Main extends Application {
 
         // Scene
 
-        VBox container =  new VBox();
+        VBox container = new VBox();
         container.getChildren().addAll(topBar, mainBox);
-        Scene scene = new Scene(container,500,700);
+        Scene scene = new Scene(container, 500, 700);
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(400);
 
         primaryStage.show();
-
-
-
-
 
 
     }
